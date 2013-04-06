@@ -208,6 +208,12 @@ namespace Firmata {
       return cmd;
     }
 
+    public static byte[] SystemReset() {
+      return new byte[] {
+        Command.SYSTEM_RESET
+      };
+    }
+
     public static byte[] SysexCommand( byte sysex_command, int[] command_data=null ) {
       int size = command_data!=null ? 3+2*command_data.Length : 3;
       byte[] cmd = new byte[size];
