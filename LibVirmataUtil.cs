@@ -273,7 +273,6 @@ namespace Firmata {
       return SysexCommand( Command.I2C_CONFIG, new int[] { delayMicroseconds });
     }
 
-
     /* I2C read/write request
      * -------------------------------
      * 0  START_SYSEX (0xF0) (MIDI System Exclusive)

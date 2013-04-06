@@ -105,7 +105,7 @@ namespace Firmata
     /// </summary>
     public const byte SYSEX_END               = 0xF7;
 
-    
+
     /// Subcommands
     public const byte RESERVED_COMMAND        = 0x00; // 2nd SysEx data byte is a chip-specific command (AVR, PIC, TI, etc).
 
