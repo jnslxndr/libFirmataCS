@@ -46,7 +46,7 @@ namespace Firmata {
     /// </param>
     public static bool DecodePortMessage(byte[] data, out int port, out int[] vals) {
       if (data.Length<3){
-        port   = 0;
+        port = 0;
         vals = new int[8];
         return false;
       }
@@ -84,8 +84,7 @@ namespace Firmata {
     /// <summary>
     /// Get the integer value that was sent using the 7-bit messages of the firmata protocol
     /// </summary>
-    public static int FromBytes(byte LSB, byte MSB)
-    {
+    public static int FromBytes(byte LSB, byte MSB) {
       return ((MSB & 0x7F) << 7) | (LSB & 0x7F);
     }
 
@@ -102,8 +101,7 @@ namespace Firmata {
     /// Send an array of boolean values indicating the state of each individual
     /// pin and get a byte representing a port
     /// </summary>
-    public static byte ValuesToPortState(int[] pins)
-    {
+    public static byte ValuesToPortState(int[] pins) {
       byte state = 0;
       for (int i = 0; i < pins.Length; i++) {
         state |= (byte) ((pins[i] & 0x01) << i);
@@ -120,8 +118,7 @@ namespace Firmata {
     /// <param name='state'>
     /// The port state.
     /// </param>
-    public static int[] ValuesFromPortState(int state)
-    {
+    public static int[] ValuesFromPortState(int state) {
       int[] port = new int[Constants.BitsPerPort];
       for (int i = 0; i < Constants.BitsPerPort; i++) {
         port[i] = (state>>i) & 0x01;
@@ -150,11 +147,9 @@ namespace Firmata {
                   break;
                 case Command.EXTENDED_ANALOG:
                   int pin  = CommandBuffer.Dequeue() & 0x7f;
-                  byte __LSB = CommandBuffer.Dequeue();
-                  byte __MSB = CommandBuffer.Dequeue();
                   s+="Extended Analog Message for pin ";
                   s+=pin.ToString() + ": ";
-                  s+=Util.GetValueFromBytes(__MSB,__LSB).ToString();
+                  s+=Util.FromBytes(CommandBuffer.Dequeue(),CommandBuffer.Dequeue()).ToString();
                   break;
                 case Command.REPORT_FIRMWARE:
                   s+="ReportFirmwareVersion";
@@ -212,9 +207,7 @@ namespace Firmata {
             s+="Analog message for pin ";
             s+=(b&0x0f).ToString();
             s+=": ";
-            byte LSB = CommandBuffer.Dequeue();
-            byte MSB = CommandBuffer.Dequeue();
-            s+=Util.GetValueFromBytes(MSB,LSB).ToString();
+            s+=Util.FromBytes(CommandBuffer.Dequeue(),CommandBuffer.Dequeue()).ToString();
             break;
         }
         if (s.Length != currentSize) s+=Glue;
