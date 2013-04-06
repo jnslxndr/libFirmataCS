@@ -70,10 +70,23 @@ namespace Firmata {
       return data > 0xF0 ? data :  (byte)(data & 0xF0); // else mask out the Commandbits
     }
 
-    public static byte[] PortMessage(int port, int[] values) {
-      byte LSB,MSB;
-      ToBytes( (int) ValuesToPortState(values), out LSB, out MSB);
-      byte[] command = {(byte)(Command.DIGITALMESSAGE | port), LSB, MSB };
+    #region Message formatting
+
+    /// <summary>
+    /// Encode a digital message as a byte sequence, ready to be sent.
+    /// </summary>
+    /// <returns>
+    /// The formatted/encoded message.
+    /// </returns>
+    /// <param name='port'>
+    /// Which digital port to target.
+    /// </param>
+    /// <param name='vals'>
+    /// The values of the pins.
+    /// </param>
+    public static byte[] EncodeDigitalMessage(int port, int[] vals) {
+      byte state = ValuesToPortState(vals);
+      byte[] command = {(byte)(Command.DIGITAL_MESSAGE | port), LSB(state), MSB(state) };
       return command;
     }
 
@@ -159,10 +172,9 @@ namespace Firmata {
     /// <summary>
     /// Split an integer value to two 7-bit parts so it can be sent using the firmata protocol
     /// </summary>
-    public static void ToBytes(int val, out byte LSB, out byte MSB)
-    {
-      LSB = (byte)( val & 0x7F );
-      MSB = (byte)((val >> 7) & 0x7F);
+    public static void ToBytes(int val, out byte _LSB, out byte _MSB) {
+      _LSB = LSB(val);
+      _MSB = MSB(val);
     }
 
     /// <summary>
