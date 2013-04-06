@@ -124,6 +124,57 @@ namespace Firmata {
     }
 
     /// <summary>
+    /// Set/toggle the digital pin reporting for a certain port.
+    /// </summary>
+    /// <returns>
+    /// The formatted command sequence.
+    /// </returns>
+    /// <param name='state'>
+    /// 1=reporting enabled, 0=reporting disabled.
+    /// </param>
+    /// <param name='port'>
+    /// Port to set.
+    /// </param>
+    public static byte[] ReportDigitalCommand(int state, int port) {
+      byte[] cmd = { (byte)(Command.REPORT_DIGITAL | port), (byte) state};
+      return cmd;
+    }
+
+    /// <summary>
+    /// Set/toggle the analog pin reporting for a certain pin.
+    /// </summary>
+    /// <returns>
+    /// The formatted command sequence.
+    /// </returns>
+    /// <param name='state'>
+    /// 1=reporting enabled, 0=reporting disabled.
+    /// </param>
+    /// <param name='port'>
+    /// Pin to set.
+    /// </param>
+    public static byte[] ReportAnalogCommand(int state, int pin) {
+      byte[] cmd = {(byte)(Command.REPORT_ANALOG | pin), (byte) state};
+      return cmd;
+    }
+
+    /// <summary>
+    /// Encode an analog message as a byte sequence, ready to sent.
+    /// </summary>
+    /// <returns>
+    /// The formatted analog message.
+    /// </returns>
+    /// <param name='pin'>
+    /// The ananloh pin to set.
+    /// </param>
+    /// <param name='value'>
+    /// The value to set the pin to.
+    /// </param>
+    public static byte[] EncodeAnalogMessage(int pin, int val) {
+      byte[] command = {(byte)(Command.ANALOG_MESSAGE | pin), LSB(val), MSB(val) };
+      return command;
+    }
+
+    /// <summary>
     /// Decodes the analog message.
     /// </summary>
     /// <returns>
