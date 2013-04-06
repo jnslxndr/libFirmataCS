@@ -10,7 +10,7 @@ Any issues & feature requests should be posted to: https://github.com/jens-a-e/V
 
 Copyleft 2011-2013
 Jens Alexander Ewald, http://lea.io
-Both: http://www.muthesius-kunsthochschule.de
+Supported by http://www.muthesius-kunsthochschule.de
 
 Inspired by the Sharpduino project by Tasos Valsamidis (LSB and MSB operations)
 See http://code.google.com/p/sharpduino if interested.
