@@ -66,9 +66,16 @@ namespace Firmata {
     }
 
     public static byte GetCommand (byte data) {
-      // Commands in the 0xF* region do not have channel data
-      return data > 0xF0 ? data :  (byte)(data & 0xF0); // else mask out the Commandbits
+      // Commands which have channel data need to be masked out
+      return (
+           data != Command.DIGITAL_MESSAGE
+        && data != Command.ANALOG_MESSAGE
+        && data != Command.REPORT_DIGITAL
+        && data != Command.REPORT_ANALOG
+
+      ) ? data :  (byte)(data & 0xF0);
     }
+    #endregion
 
     #region Message formatting
 
