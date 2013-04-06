@@ -137,6 +137,26 @@ namespace Firmata {
     }
 
     /// <summary>
+    /// Retrieve the least significant byte.
+    /// </summary>
+    /// <param name='val'>
+    /// Value to convert.
+    /// </param>
+    public static byte LSB(int val) {
+      return (byte)( val & 0x7F );
+    }
+
+    /// <summary>
+    /// Retrieve the most significant byte.
+    /// </summary>
+    /// <param name='val'>
+    /// Value to convert.
+    /// </param>
+    public static byte MSB(int val) {
+      return (byte)((val >> 7) & 0x7F);
+    }
+
+    /// <summary>
     /// Split an integer value to two 7-bit parts so it can be sent using the firmata protocol
     /// </summary>
     public static void ToBytes(int val, out byte LSB, out byte MSB)
