@@ -60,7 +60,7 @@ namespace Firmata {
   }
 
   public struct Constants {
-    public const int BitsPerPort = 8;
+    public const int BitsPerPort = 14;
   }
 
 }
