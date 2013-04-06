@@ -184,5 +184,13 @@ namespace Firmata
     I2C = 0x06,
   }
 
+  public enum I2CMode {
+    WRITE          = 0x00,
+    READ_ONCE      = 0x04, // Bit 3 set    B0000100
+    READ           = 0x08, // Bit 4 set    B0001000
+    STOP_READING   = 0x0C, // Bit 3+4 set  B0001100
+    TENBIT         = 0x10, // Bit 5 set    B0010000
+  }
+
   #endregion
 }
