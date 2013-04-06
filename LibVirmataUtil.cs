@@ -51,9 +51,9 @@ using System.Collections.Generic;
 
 namespace Firmata {
 
-  #region Static utils
   public static class Util {
 
+    #region Command utils
     public static bool ContainsCommand(byte[] msg, byte cmd) {
       foreach (byte b in msg) {
         if (VerifiyCommand(b,cmd)) return true;
@@ -148,6 +148,8 @@ namespace Firmata {
       val = FromBytes(data[1], data[2]);
       return true;
     }
+    #endregion
+    #region Byte utils
 
     /// <summary>
     /// Get the integer value that was sent using the 7-bit messages of the firmata protocol
@@ -212,6 +214,8 @@ namespace Firmata {
       }
       return port;
     }
+
+    #endregion
 
     public static string CommandBufferToString(Queue<byte> CommandBuffer, string Glue = "\r\n")
     {
@@ -302,5 +306,5 @@ namespace Firmata {
       return s;
     }
   }
-  #endregion
+
 }
