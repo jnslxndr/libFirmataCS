@@ -243,11 +243,11 @@ namespace Firmata {
             s+=")";
             break;
 
-          case Command.RESET:
+          case Command.SYSTEM_RESET:
             s+="Reset!";
             break;
 
-          case Command.SETPINMODE:
+          case Command.SET_PIN_MODE:
             s+="Set PinMode of pin ";
             s+=CommandBuffer.Dequeue().ToString();
             s+=" to ";
@@ -262,28 +262,28 @@ namespace Firmata {
             }
             break;
 
-          case Command.TOGGLEDIGITALREPORT:
+          case Command.REPORT_DIGITAL:
             s+="DIGITAL Pin Reporting for port ";
             s+=(b&0x0f).ToString();
             s+=" set to: ";
             s+=CommandBuffer.Dequeue().ToString();
             break;
 
-          case Command.TOGGLEANALOGREPORT:
+          case Command.REPORT_ANALOG:
             s+="ANALOG Pin Reporting for pin ";
             s+=(b&0x0f).ToString();
             s+=" set to: ";
             s+=CommandBuffer.Dequeue().ToString();
             break;
 
-          case Command.DIGITALMESSAGE:
+          case Command.DIGITAL_MESSAGE:
             s+="Digital message for port ";
             s+=(b&0x0f).ToString();
             s+=": ";
             s+=Convert.ToString(CommandBuffer.Dequeue(), 2);
             break;
 
-          case Command.ANALOGMESSAGE:
+          case Command.ANALOG_MESSAGE:
             s+="Analog message for pin ";
             s+=(b&0x0f).ToString();
             s+=": ";

@@ -64,30 +64,30 @@ namespace Firmata
     /// The distinctive value that states that this message is a digital message.
     /// It comes as a report or as a command
     /// </summary>
-    public const byte DIGITALMESSAGE          = 0x90;
+    public const byte DIGITAL_MESSAGE          = 0x90;
 
     /// <summary>
     /// The command that toggles the continuous sending of the
     /// analog reading of the specified pin
     /// </summary>
-    public const byte TOGGLEANALOGREPORT      = 0xC0;
+    public const byte REPORT_ANALOG           = 0xC0;
 
     /// <summary>
     /// The command that toggles the continuous sending of the
     /// digital state of the specified port
     /// </summary>
-    public const byte TOGGLEDIGITALREPORT     = 0xD0;
+    public const byte REPORT_DIGITAL          = 0xD0;
 
     /// <summary>
     /// The distinctive value that states that this message is an analog message.
     /// It comes as a report for analog in pins, or as a command for PWM
     /// </summary>
-    public const byte ANALOGMESSAGE           = 0xE0;
+    public const byte ANALOG_MESSAGE           = 0xE0;
 
     /// <summary>
     /// A command to change the pin mode for the specified pin
     /// </summary>
-    public const byte SETPINMODE              = 0xF4;
+    public const byte SET_PIN_MODE              = 0xF4;
 
     /// <summary>
     /// Report Protocol Version
