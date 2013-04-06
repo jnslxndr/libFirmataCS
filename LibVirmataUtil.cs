@@ -273,6 +273,23 @@ namespace Firmata {
       return SysexCommand( Command.I2C_CONFIG, new int[] { delayMicroseconds });
     }
 
+
+    /* I2C read/write request
+     * -------------------------------
+     * 0  START_SYSEX (0xF0) (MIDI System Exclusive)
+     * 1  I2C_REQUEST (0x76)
+     * 2  slave address (LSB)
+     * 3  slave address (MSB) + read/write and address mode bits
+          {7: always 0} + {6: reserved} + {5: address mode, 1 means 10-bit mode} +
+          {4-3: read/write, 00 => write, 01 => read once, 10 => read continuously, 11 => stop reading} +
+          {2-0: slave address MSB in 10-bit mode, not used in 7-bit mode}
+     * 4  data 0 (LSB)
+     * 5  data 0 (MSB)
+     * 6  data 1 (LSB)
+     * 7  data 1 (MSB)
+     * ...
+     * n  END_SYSEX (0xF7)
+     */
     public static byte[] I2CRequest(int slaveAddress, int[] data=null, I2CMode readWriteMode=I2CMode.READ, bool tenBitMode=false) {
       int size = (data!=null ? data.Length : 0 ) + 1;
       int[] _data = new int[size];
