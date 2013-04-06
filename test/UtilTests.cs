@@ -137,8 +137,51 @@ namespace LibVirmata {
 
     }
 
+  }
+
+  [TestFixture()]
+  public class CommandUtilTest {
+
+    [Test()]
+    public void TestGetCommandWithDigitalMessage() {
+      int port = 1;
+      int[]  values = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+      byte[] msg    = Firmata.Util.EncodeDigitalMessage(port,values);
+
+      byte command = Firmata.Util.GetCommand(msg[0]);
+
+      Assert.AreEqual(Firmata.Command.DIGITAL_MESSAGE, command);
+    }
+
+    [Test()]
+    public void TestVerifyCommandWithDigitalMessage() {
+      int port = 1;
+      int[]  values = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+      byte[] msg    = Firmata.Util.EncodeDigitalMessage(port,values);
+
+      bool isCommand = Firmata.Util.VerifiyCommand(msg[0],Firmata.Command.DIGITAL_MESSAGE);
+
+      Assert.That(isCommand);
+    }
+
+    [Test()]
+    public void TestContainsCommandWithDigitalMessage() {
+      int port = 1;
+      int[]  values = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+      byte[] msg    = Firmata.Util.EncodeDigitalMessage(port,values);
+
+      bool hasCommand = Firmata.Util.ContainsCommand(msg,Firmata.Command.DIGITAL_MESSAGE);
+
+      Assert.That(hasCommand);
+    }
 
 
+    [Test()]
+    public void TestContainsSysexCommand() {
+      byte[] msg = Firmata.Util.RequestFirmwareInformation();
+      Assert.That (Firmata.Util.ContainsCommand(msg, Firmata.Command.SYSEX_START));
+      Assert.That (Firmata.Util.ContainsCommand(msg, Firmata.Command.SYSEX_END));
+    }
   }
 }
 
