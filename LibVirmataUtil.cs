@@ -200,6 +200,100 @@ namespace Firmata {
       return true;
     }
     #endregion
+
+    #region Command Helpers
+
+    public static byte[] SetPinMode(int pin, PinMode mode) {
+      byte[] cmd = { (byte) Command.SET_PIN_MODE, (byte) pin, (byte) mode };
+      return cmd;
+    }
+
+    public static byte[] SysexCommand( byte sysex_command, int[] command_data=null ) {
+      int size = command_data!=null ? 3+2*command_data.Length : 3;
+      byte[] cmd = new byte[size];
+      cmd[0] = Command.SYSEX_START;
+      cmd[1] = sysex_command;
+      if (command_data!=null) {
+        for (int i=2; i<size-1; i++) {
+          cmd[i] = LSB(command_data[i-2]);
+          cmd[i] = MSB(command_data[i-2]);
+        }
+      }
+      cmd[size-1] = Command.SYSEX_END;
+      return cmd;
+    }
+
+    public static byte[] RequestFirmwareInformation() {
+      return new byte[] {
+        Command.SYSEX_START,
+        Command.REPORT_FIRMWARE,
+        Command.SYSEX_END
+      };
+    }
+
+    public static byte[] RequestFirmwareVersion() {
+      return new byte[] {
+        Command.REPORT_VERSION,
+      };
+    }
+
+    public static byte[] RequestCapabilities() {
+      return new byte [] {
+        Command.SYSEX_START,
+        Command.CAPABILITY_QUERY,
+        Command.SYSEX_END
+      };
+    }
+
+    public static byte[] RequestAnalogMapping() {
+      return new byte[] {
+        Command.SYSEX_START,
+        Command.ANALOG_MAPPING_QUERY,
+        Command.SYSEX_END
+      };
+    }
+
+    public static byte[] RequestPinState() {
+      return new byte[] {
+        Command.SYSEX_START,
+        Command.PIN_STATE_QUERY,
+        Command.SYSEX_END
+      };
+    }
+
+    public static byte[] SetSamplingInterval (int interval) {
+      return SysexCommand(Command.SAMPLING_INTERVAL, new int[]{ interval });
+    }
+
+    public static byte[] ServoConfig (int pin, int minPulse, int maxPulse) {
+      return SysexCommand(Command.SERVO_CONFIG, new int[] { minPulse, maxPulse });
+    }
+
+    public static byte[] I2CConfig(int delayMicroseconds) {
+      return SysexCommand( Command.I2C_CONFIG, new int[] { delayMicroseconds });
+    }
+
+    public static byte[] I2CRequest(int slaveAddress, int[] data=null, I2CMode readWriteMode=I2CMode.READ, bool tenBitMode=false) {
+      int size = (data!=null ? data.Length : 0 ) + 1;
+      int[] _data = new int[size];
+
+      slaveAddress &= 0x3FFF; // Use only 14 bits
+      slaveAddress = tenBitMode ? slaveAddress & 0x03FF : slaveAddress & 0x007F;
+      if(tenBitMode) readWriteMode |= I2CMode.TENBIT;
+      slaveAddress |= (int) readWriteMode << 7;
+      _data[0] = slaveAddress;
+
+      if(data!=null) {
+        for(int i=1; i < size; i++) {
+          _data[i] = data[i-1];
+        }
+      }
+
+      return SysexCommand(Command.I2C_REQUEST, _data);
+    }
+
+    #endregion
+
     #region Byte utils
 
     /// <summary>
