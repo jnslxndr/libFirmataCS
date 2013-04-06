@@ -124,40 +124,6 @@ namespace Firmata {
     }
 
     /// <summary>
-    /// Set/toggle the digital pin reporting for a certain port.
-    /// </summary>
-    /// <returns>
-    /// The formatted command sequence.
-    /// </returns>
-    /// <param name='state'>
-    /// 1=reporting enabled, 0=reporting disabled.
-    /// </param>
-    /// <param name='port'>
-    /// Port to set.
-    /// </param>
-    public static byte[] ReportDigitalCommand(int state, int port) {
-      byte[] cmd = { (byte)(Command.REPORT_DIGITAL | port), (byte) state};
-      return cmd;
-    }
-
-    /// <summary>
-    /// Set/toggle the analog pin reporting for a certain pin.
-    /// </summary>
-    /// <returns>
-    /// The formatted command sequence.
-    /// </returns>
-    /// <param name='state'>
-    /// 1=reporting enabled, 0=reporting disabled.
-    /// </param>
-    /// <param name='port'>
-    /// Pin to set.
-    /// </param>
-    public static byte[] ReportAnalogCommand(int state, int pin) {
-      byte[] cmd = {(byte)(Command.REPORT_ANALOG | pin), (byte) state};
-      return cmd;
-    }
-
-    /// <summary>
     /// Encode an analog message as a byte sequence, ready to sent.
     /// </summary>
     /// <returns>
@@ -202,6 +168,40 @@ namespace Firmata {
     #endregion
 
     #region Command Helpers
+
+    /// <summary>
+    /// Set/toggle the digital pin reporting for a certain port.
+    /// </summary>
+    /// <returns>
+    /// The formatted command sequence.
+    /// </returns>
+    /// <param name='state'>
+    /// 1=reporting enabled, 0=reporting disabled.
+    /// </param>
+    /// <param name='port'>
+    /// Port to set.
+    /// </param>
+    public static byte[] ReportDigitalCommand(int state, int port) {
+      byte[] cmd = { (byte)(Command.REPORT_DIGITAL | port), (byte) state};
+      return cmd;
+    }
+
+    /// <summary>
+    /// Set/toggle the analog pin reporting for a certain pin.
+    /// </summary>
+    /// <returns>
+    /// The formatted command sequence.
+    /// </returns>
+    /// <param name='state'>
+    /// 1=reporting enabled, 0=reporting disabled.
+    /// </param>
+    /// <param name='port'>
+    /// Pin to set.
+    /// </param>
+    public static byte[] ReportAnalogCommand(int state, int pin) {
+      byte[] cmd = {(byte)(Command.REPORT_ANALOG | pin), (byte) state};
+      return cmd;
+    }
 
     public static byte[] SetPinMode(int pin, PinMode mode) {
       byte[] cmd = { (byte) Command.SET_PIN_MODE, (byte) pin, (byte) mode };
