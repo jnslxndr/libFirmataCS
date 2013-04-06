@@ -289,14 +289,14 @@ namespace Firmata {
      * ...
      * n  END_SYSEX (0xF7)
      */
-    public static byte[] I2CRequest(int slaveAddress, int[] data=null, I2CMode readWriteMode=I2CMode.READ, bool tenBitMode=false) {
+    public static byte[] I2CRequest(int slaveAddress, int[] data=null, I2CMode mode=I2CMode.READ) {
       int size = (data!=null ? data.Length : 0 ) + 1;
       int[] _data = new int[size];
 
       slaveAddress &= 0x3FFF; // Use only 14 bits
       slaveAddress = tenBitMode ? slaveAddress & 0x03FF : slaveAddress & 0x007F;
-      if(tenBitMode) readWriteMode |= I2CMode.TENBIT;
-      slaveAddress |= (int) readWriteMode << 7;
+
+      slaveAddress |= (int) mode << 7;
       _data[0] = slaveAddress;
 
       if(data!=null) {
