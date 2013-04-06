@@ -67,12 +67,12 @@ namespace Firmata {
 
     public static byte GetCommand (byte data) {
       // Commands which have channel data need to be masked out
+      int masked = data & 0xF0;
       return (
-           data != Command.DIGITAL_MESSAGE
-        && data != Command.ANALOG_MESSAGE
-        && data != Command.REPORT_DIGITAL
-        && data != Command.REPORT_ANALOG
-
+           masked != Command.DIGITAL_MESSAGE
+        && masked != Command.ANALOG_MESSAGE
+        && masked != Command.REPORT_DIGITAL
+        && masked != Command.REPORT_ANALOG
       ) ? data :  (byte)(data & 0xF0);
     }
     #endregion
