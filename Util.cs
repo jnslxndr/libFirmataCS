@@ -115,7 +115,7 @@ namespace Firmata {
     public static bool DecodeDigitalMessage(byte[] data, out int port, out int[] vals) {
       if (data.Length<3){
         port = 0;
-        vals = new int[8];
+        vals = new int[Constants.BitsPerPort];
         return false;
       }
       port = (data[0] & 0x0f);
