@@ -102,7 +102,42 @@ namespace LibVirmata {
       Assert.AreEqual( Firmata.Command.DIGITAL_MESSAGE | port, msg[0]);
       Assert.AreEqual( 0x7F, msg[1]);
       Assert.AreEqual( 0x7F, msg[2]);
+
+      // And decode again
+
+      int _port;
+      int[] _values = new int[14];
+
+      Firmata.Util.DecodeDigitalMessage(msg, out _port, out _values);
+
+      Assert.AreEqual( port, _port);
+      Assert.AreEqual( values, _values);
     }
+
+
+    [Test()]
+    public void TestAnalogMessageEncoding() {
+      int pin = 1;
+      int val = 255;
+      byte[] msg = Firmata.Util.EncodeAnalogMessage(pin,val);
+
+      Assert.AreEqual( Firmata.Command.ANALOG_MESSAGE | pin, msg[0]);
+      Assert.AreEqual( Firmata.Util.LSB(val), msg[1]);
+      Assert.AreEqual( Firmata.Util.MSB(val), msg[2]);
+
+      // And decode again
+
+      int _pin;
+      int _value;
+
+      Firmata.Util.DecodeAnalogMessage(msg, out _pin, out _value);
+
+      Assert.AreEqual(pin, _pin);
+      Assert.AreEqual(val, _value);
+
+    }
+
+
 
   }
 }
