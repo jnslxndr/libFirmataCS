@@ -37,7 +37,7 @@
     <Compile Include="LibVirmata.cs" />
     <Compile Include="LibVirmataUtil.cs" />
     <Compile Include="LibVirmataDefaults.cs" />
-    <Compile Include="test\ByteUtilsTest.cs" />
+    <Compile Include="test\UtilTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
