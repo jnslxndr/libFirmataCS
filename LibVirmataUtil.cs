@@ -105,7 +105,7 @@ namespace Firmata {
     /// <param name='vals'>
     /// Gets set to an array of integer values, relative to their port state.
     /// </param>
-    public static bool DecodePortMessage(byte[] data, out int port, out int[] vals) {
+    public static bool DecodeDigitalMessage(byte[] data, out int port, out int[] vals) {
       if (data.Length<3){
         port = 0;
         vals = new int[8];
