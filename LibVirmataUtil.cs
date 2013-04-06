@@ -92,7 +92,7 @@ namespace Firmata {
     /// The values of the pins.
     /// </param>
     public static byte[] EncodeDigitalMessage(int port, int[] vals) {
-      byte state = ValuesToPortState(vals);
+      int state = ValuesToPortState(vals);
       byte[] command = {(byte)(Command.DIGITAL_MESSAGE | port), LSB(state), MSB(state) };
       return command;
     }
@@ -294,7 +294,7 @@ namespace Firmata {
       int[] _data = new int[size];
 
       slaveAddress &= 0x3FFF; // Use only 14 bits
-      slaveAddress = tenBitMode ? slaveAddress & 0x03FF : slaveAddress & 0x007F;
+      slaveAddress = (mode & I2CMode.TENBIT)>0 ? slaveAddress & 0x03FF : slaveAddress & 0x007F;
 
       slaveAddress |= (int) mode << 7;
       _data[0] = slaveAddress;
@@ -351,10 +351,10 @@ namespace Firmata {
     /// Send an array of boolean values indicating the state of each individual
     /// pin and get a byte representing a port
     /// </summary>
-    public static byte ValuesToPortState(int[] pins) {
-      byte state = 0;
+    public static int ValuesToPortState(int[] pins) {
+      int state = 0x0000;
       for (int i = 0; i < pins.Length; i++) {
-        state |= (byte) ((pins[i] & 0x01) << i);
+        state |= (pins[i] & 0x01) << i;
       }
       return state;
     }
