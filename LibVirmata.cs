@@ -46,13 +46,6 @@ For more information, please refer to <http://unlicense.org/>
 */
 #endregion
 
-#region usings
-
-using System;
-using System.Collections.Generic;
-
-#endregion usings
-
 namespace Firmata
 {
   #region Definitions
