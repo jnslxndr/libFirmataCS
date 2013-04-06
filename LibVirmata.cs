@@ -58,18 +58,6 @@ namespace Firmata
   #region Definitions
   /// For the Specs see: http://firmata.org/wiki/Protocol
 
-  /// Some helpful constants for the NameSpace
-  public struct Defaults {
-    public const int SampleRate     = 20;
-    public const int MaxAnalogPins  = 16;
-    public const int MaxDigitalPins = 128;
-    public const PinMode PINMODE = PinMode.OUTPUT;
-  }
-
-  public struct Constants {
-    public const int BitsPerPort = 8;
-  }
-
   public struct Command
   {
     /// <summary>
