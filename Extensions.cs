@@ -14,6 +14,21 @@ namespace Firmata {
         }
       }
 
+      public static IEnumerable<int> Decode7BitBytes( this Stream stream, bool lsbfirst=true) {
+        if (stream != null) {
+          stream.Seek( 0, SeekOrigin.Begin );
+          int[] data = new int[2];
+          for (int i = stream.ReadByte(); i != -1; i = stream.ReadByte()) {
+            if (stream.Position%2==0) {
+              data[1] = i;
+              yield return data.Decode14Bit(lsbfirst);
+            } else {
+              data[0] = i;
+            }
+          }
+        }
+      }
+
       public static byte[] ToArray( this Stream stream ) {
         if (stream != null) {
           byte[] bytes = new byte[stream.Length];
@@ -29,23 +44,59 @@ namespace Firmata {
 
     public static class ByteExtensions {
       public static byte LSB( this int i ) {
-        return Util.LSB( i );
+        return (byte) (i &0x7f);
       }
 
       public static byte MSB( this int i ) {
-        return Util.MSB( i );
+        return (byte) ((i >> 7) & 0x7f);
       }
 
-      public static int Read14Bit(this Queue<byte> q) {
-        return Util.FromBytes(q.Dequeue(),q.Dequeue());
+      public static int DecodeWith7BitMSB(this int lsb, int msb) {
+        if (lsb < 0 || msb < 0) return -1; // Return negative value on failure
+        return (lsb & 0x7f) & ((msb & 0x7f) << 7);
       }
 
-//      public static int Read14Bit(this Stream stream) {
-//        //return Util.FromBytes(stream.readB
-//      }
+      public static int DecodeWith7BitLSB(this int msb, int lsb) {
+        if (lsb < 0 || msb < 0) return -1; // Return negative value on failure
+        return (lsb & 0x7f) & ((msb & 0x7f) << 7);
+      }
 
+      public static int Decode14Bit(this int[] source, bool lsbfirst=true) {
+        return lsbfirst ? source[0].DecodeWith7BitMSB(source[1]) : source[0].DecodeWith7BitLSB(source[1]);
+      }
+
+      public static int Decode14Bit(this Queue<byte> q, bool lsbfirst=true) {
+        return (new int[] {
+          q.Dequeue(),
+          q.Dequeue()
+        }).Decode14Bit();
+      }
+
+      public static int Decode14Bit(this Stream stream, bool lsbfirst=true) {
+        return (new int[] { 
+          stream.ReadByte(),
+          stream.ReadByte()
+        }).Decode14Bit(lsbfirst);
+      }
+    }
+
+    public static class FirmataExtensions {
       public static string ToFirmataCommandString(this byte b) {
         return Command.ToString(b);
+      }
+    }
+
+    public class ByteWriter : BinaryWriter {
+      public ByteWriter() : this(Stream.Null) {}
+      public ByteWriter (Stream s) : base(s) {}
+      public static ByteWriter operator +(ByteWriter writer, byte b) {
+        writer.Write(b);
+        return writer;
+      }
+      public static ByteWriter operator +(ByteWriter writer, byte[] bytes) {
+        foreach (byte b in bytes) 
+          writer.Write(b);
+        return writer;
       }
     }
 
