@@ -51,7 +51,6 @@ namespace Firmata {
     }
 
     protected void Decode( byte data ) {
-
       // Check if the 8th bit is set, then we have a command
       if ((data & 0x80) > 0) {
         byte cmd = Util.GetCommand( data );
@@ -95,22 +94,23 @@ namespace Firmata {
             // unknown command
             break;
         }
-      } else {
+      }
+      else {
         buffer.Enqueue(data);
         if (--remaining==0) {
           // process the message
           switch (lastCommand) {
-                case Command.ANALOG_MESSAGE:
-                  int pin,value;
-                  Util.DecodeAnalogMessage(buffer.ToArray(), out pin, out value);
-                  if (AnalogEvent!=null) AnalogEvent.Invoke(this, new AnalogMessageEventsArgs(pin,value));
-                  break;
-                case Command.DIGITAL_MESSAGE:
-                  int port;
-                  int[] values;
-                  Util.DecodeDigitalMessage(buffer.ToArray(),out port, out values);
-                  if (DigitalEvent!=null) DigitalEvent.Invoke(this, new DigitalMessageEventsArgs(port,values));
-                  break;
+            case Command.ANALOG_MESSAGE:
+              int pin,value;
+              Util.DecodeAnalogMessage(buffer.ToArray(), out pin, out value);
+              if (AnalogEvent!=null) AnalogEvent.Invoke(this, new AnalogMessageEventsArgs(pin,value));
+              break;
+            case Command.DIGITAL_MESSAGE:
+              int port;
+              int[] values;
+              Util.DecodeDigitalMessage(buffer.ToArray(),out port, out values);
+              if (DigitalEvent!=null) DigitalEvent.Invoke(this, new DigitalMessageEventsArgs(port,values));
+              break;
             case Command.REPORT_DIGITAL:
             case Command.REPORT_ANALOG:
               //Console.WriteLine("Toogle analog/digital pin reporting ({0})", BitConverter.ToString(buffer.ToArray()));
