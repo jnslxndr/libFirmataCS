@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("LibVirmata")]
 [assembly: AssemblyDescription("Firmata Protocol Helper Library")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Muthesius Kunsthochschule")]
+[assembly: AssemblyCompany("Labor für elektronische Apparate")]
 [assembly: AssemblyProduct("LibVirmata")]
 [assembly: AssemblyCopyright("Jens Alexander Ewald, Copyleft 2011-2013, lea.io")]
 [assembly: AssemblyTrademark("")]
