@@ -100,10 +100,6 @@ namespace Firmata {
         if (--remaining==0) {
           // process the message
           switch (lastCommand) {
-            case Command.DIGITAL_MESSAGE:
-            case Command.ANALOG_MESSAGE:
-              // Fire the OnMessage Event
-              switch (lastCommand) {
                 case Command.ANALOG_MESSAGE:
                   int pin,value;
                   Util.DecodeAnalogMessage(buffer.ToArray(), out pin, out value);
@@ -115,8 +111,6 @@ namespace Firmata {
                   Util.DecodeDigitalMessage(buffer.ToArray(),out port, out values);
                   if (DigitalEvent!=null) DigitalEvent.Invoke(this, new DigitalMessageEventsArgs(port,values));
                   break;
-              }
-              break;
             case Command.REPORT_DIGITAL:
             case Command.REPORT_ANALOG:
               //Console.WriteLine("Toogle analog/digital pin reporting ({0})", BitConverter.ToString(buffer.ToArray()));
