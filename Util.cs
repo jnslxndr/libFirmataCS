@@ -1,6 +1,6 @@
 #region Copyright notice
 /*
-A Firmata Helper Library v1.0.x
+A Firmata Helper Library v1.2.x
 -------------------------------
 Encoding control and configuration messages for Firmata enabled MCUs.
 
@@ -12,7 +12,7 @@ Copyleft 2011-2013
 Jens Alexander Ewald, http://lea.io
 Supported by http://www.muthesius-kunsthochschule.de
 
-Inspired by the Sharpduino project by Tasos Valsamidis (LSB and MSB operations)
+Inspired by the Sharpduino project by Tasos Valsamidis
 See http://code.google.com/p/sharpduino if interested.
 
 
@@ -48,8 +48,23 @@ For more information, please refer to <http://unlicense.org/>
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Firmata {
+
+  public class ByteWriter : BinaryWriter {
+    public ByteWriter() : this(Stream.Null) {}
+    public ByteWriter (Stream s) : base(s) {}
+    public static ByteWriter operator +(ByteWriter writer, byte b) {
+      writer.Write(b);
+      return writer;
+    }
+    public static ByteWriter operator +(ByteWriter writer, byte[] bytes) {
+      foreach (byte b in bytes) 
+        writer.Write(b);
+      return writer;
+    }
+  }
 
   public static class Util {
 
@@ -66,7 +81,7 @@ namespace Firmata {
     }
 
     public static byte GetCommand (byte data) {
-      // Commands which have channel data need to be masked out
+      // Commands with channel data need to be masked
       int masked = data & 0xF0;
       return (
            masked != Command.DIGITAL_MESSAGE
@@ -220,9 +235,9 @@ namespace Firmata {
       cmd[0] = Command.SYSEX_START;
       cmd[1] = sysex_command;
       if (command_data!=null) {
-        for (int i=2; i<size-1; i++) {
+        for (int i=2; i<size-1; i+=2) {
           cmd[i] = LSB(command_data[i-2]);
-          cmd[i] = MSB(command_data[i-2]);
+          cmd[i+1] = MSB(command_data[i-2]);
         }
       }
       cmd[size-1] = Command.SYSEX_END;
@@ -243,7 +258,7 @@ namespace Firmata {
       };
     }
 
-    public static byte[] RequestCapabilities() {
+    public static byte[] RequestCapabilityreport() {
       return new byte [] {
         Command.SYSEX_START,
         Command.CAPABILITY_QUERY,
@@ -384,6 +399,20 @@ namespace Firmata {
 
     #endregion
 
+    public static string PinModeToString(PinMode mode) {
+      string s = "";
+            switch(mode) {
+              case PinMode.INPUT:   s="INPUT";  break;
+              case PinMode.OUTPUT:  s="OUTPUT"; break;
+              case PinMode.ANALOG:  s="ANALOG"; break;
+              case PinMode.PWM:     s="PWM";    break;
+              case PinMode.SERVO:   s="SERVO";  break;
+              case PinMode.SHIFT:   s="SHIFT";  break;
+              case PinMode.I2C:     s="I2C";    break;
+            }
+      return s;
+    }
+
     public static string CommandBufferToString(Queue<byte> CommandBuffer, string Glue = "\r\n")
     {
       string s = string.Empty;
@@ -429,15 +458,7 @@ namespace Firmata {
             s+="Set PinMode of pin ";
             s+=CommandBuffer.Dequeue().ToString();
             s+=" to ";
-            switch((PinMode)CommandBuffer.Dequeue()) {
-              case PinMode.INPUT:   s+="INPUT";  break;
-              case PinMode.OUTPUT:  s+="OUTPUT"; break;
-              case PinMode.ANALOG:  s+="ANALOG"; break;
-              case PinMode.PWM:     s+="PWM";    break;
-              case PinMode.SERVO:   s+="SERVO";  break;
-              case PinMode.SHIFT:   s+="SHIFT";  break;
-              case PinMode.I2C:     s+="I2C";    break;
-            }
+            s+=PinModeToString((PinMode)CommandBuffer.Dequeue());
             break;
 
           case Command.REPORT_DIGITAL:

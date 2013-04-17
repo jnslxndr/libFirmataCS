@@ -53,14 +53,18 @@ For more information, please refer to <http://unlicense.org/>
 namespace Firmata {
 
   public struct Defaults {
-    public const int SampleRate     = 20;
-    public const int MaxAnalogPins  = 16;
-    public const int MaxDigitalPins = 128;
-    public const PinMode PINMODE = PinMode.OUTPUT;
+    public const int SampleRate     = 50;
+    public const int SamplingInterval = 1/SampleRate*1000;
+    public const PinMode PINMODE    = PinMode.OUTPUT;
+    public static int MaxDataBytes   = 32;
   }
 
   public struct Constants {
     public const int BitsPerPort = 14;
+    public const int MaxAnalogPins  = 16;
+    public const int MaxDigitalPins = 128;
+    public const int MaxDigitalPorts = 16;
+    public const int MAX_DATA_BYTES = 32;
   }
 
 }
