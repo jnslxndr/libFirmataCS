@@ -52,20 +52,6 @@ using System.IO;
 
 namespace Firmata {
 
-  public class ByteWriter : BinaryWriter {
-    public ByteWriter() : this(Stream.Null) {}
-    public ByteWriter (Stream s) : base(s) {}
-    public static ByteWriter operator +(ByteWriter writer, byte b) {
-      writer.Write(b);
-      return writer;
-    }
-    public static ByteWriter operator +(ByteWriter writer, byte[] bytes) {
-      foreach (byte b in bytes) 
-        writer.Write(b);
-      return writer;
-    }
-  }
-
   public static class Util {
 
     #region Command utils
