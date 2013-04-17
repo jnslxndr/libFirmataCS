@@ -136,6 +136,7 @@ namespace Firmata {
     protected void OnSysex(object sender, SysexEventArgs Args) {
       switch (Args.Command) {
         case Command.REPORT_FIRMWARE:
+          if (Args.Data==null || Args.Data.Length <= 0) break;
           Queue<byte> buffer = new Queue<byte>(Args.Data);
           int major = (int) buffer.Dequeue();
           int minor = (int) buffer.Dequeue();
